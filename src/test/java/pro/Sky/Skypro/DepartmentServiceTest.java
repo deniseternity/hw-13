@@ -8,10 +8,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.Sky.Skypro.exception.EmployeeNotFoundException;
 import pro.Sky.Skypro.model.Employee;
+import pro.Sky.Skypro.service.DepartmentService;
 import pro.Sky.Skypro.service.EmployeeService;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class DepartmentServiceTest {
@@ -23,7 +29,7 @@ public class DepartmentServiceTest {
 
     @BeforeEach
     void setUp() {
-        var employees = List.of(
+        Employee employees = List.of(
                 new Employee("test", "test", 1000, 1),
                 new Employee("test2", "test2", 10020, 1),
                 new Employee("test3", "test3", 10030, 2),
@@ -31,27 +37,27 @@ public class DepartmentServiceTest {
                 new Employee("test5", "test5", 10050, 3),
                 new Employee("test6", "test6", 10060, 3),
                 );
-        when(EmployeeService.getAll()).thenReturn(employees);
+        when(EmployeeService.getAll()).thenReturn((Set<Employee>) employees);
     }
 
     @Test
     void testDepartmentMaxSalary() {
-        assertThat(departmentService.findMaxSalary(1)).isEqualsTo(new Employee("test2", "test2", 10020, 1));
-        assertThat(departmentService.findMaxSalary(3)).isEqualsTo(new Employee("test6", "test6", 10060, 3));
+        assertThat(departmentService.findMaxSalary(1).equals(new Employee("test2", "test2", 10020, 1));
+        assertThat(departmentService.findMaxSalary(3)).equals(new Employee("test6", "test6", 10060, 3));
         assertThrows(EmployeeNotFoundException.class, () -> departmentService.findMaxSalary(1111));
     }
 
     @Test
     void testDepartmentMinSalary() {
-        var actual1 = departmentService.findMinSalary(1);
+        var actual1 = departmentService.findminSalary(1);
         assertThat(actual1.isPresent()).isTrue();
         assertThat(actual1.get().isEqualTo(new Employee("test", "test", 1000, 1)));
 
-        var actual2 = departmentService.findMinSalary(1);
+        var actual2 = departmentService.findminSalary(1);
         assertThat(actual2.isPresent()).isTrue();
         assertThat(actual2.get().isEqualTo(new Employee("test6", "test6", 10060, 3)));
 
-        var actual3 = departmentService.findMinSalary(1111);
+        var actual3 = departmentService.findminSalary(1111);
         assertThat(actual3.isEmpty()).isTrue();
     }
 

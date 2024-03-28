@@ -5,69 +5,70 @@ import org.junit.jupiter.api.Test;
 import pro.Sky.Skypro.exception.EmployeeAlreadyAddedException;
 import pro.Sky.Skypro.exception.EmployeeNotFoundException;
 import pro.Sky.Skypro.exception.EmployeeStoragelsFullException;
+import pro.Sky.Skypro.exception.WrongNameException;
 import pro.Sky.Skypro.model.Employee;
 import pro.Sky.Skypro.service.EmployeeService;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EmployeeServiceTest {
     EmployeeService employeeService = new EmployeeService();
 
     @Test
     void testAdd() {
-        employeeService.add("test", "testtest", 1000, 1);
-        employeeService.add("tEsTTEST", "teStteStest", 2000, 3);
+
+        EmployeeService employeeService = new EmployeeService();
+
+        employeeService.add("test", "testtest");
+        employeeService.add("tEsTTEST", "teStteStest");
 
         var actual1 = employeeService.find("test", "TESTTEST");
-        assertThat(actual1).isNotNull();
-        assertThat(actual1).getFirstName()).isEqualTo("Test");
-        assertThat(actual1).getLastName()).isEqualTo("Testtest");
-        assertThat(actual1).getDepartment()).isEqualTo(1);
-        assertThat(actual1).getSalary()).isEqualTo(1000);
 
-        var actual2 = employeeService.find("TESTTEST", "TESTTESTtest");
         assertThat(actual1).isNotNull();
-        assertThat(actual1).getFirstName()).isEqualTo("Test");
-        assertThat(actual1).getLastName()).isEqualTo("Testtest");
-        assertThat(actual1).getDepartment()).isEqualTo(3);
-        assertThat(actual1).getSalary()).isEqualTo(2000);
+        assertThat(actual1.getFirstName()).isEqualTo("Test");
+        assertThat(actual1.getLastName()).isEqualTo("Testtest");
+        assertThat(actual1.getDepartment()).isEqualTo(1);
+        assertThat(actual1.getSalary()).isEqualTo(1000);
+}
 
         @Test
-        void testAddDuplicate () {
-            employeeService.add("test", "testtest", 1000, 1);
-            assertThrows(EmployeeAlreadyAddedException.class ->employeeService.add("test", "testtest", 2000, 3))
+        void testAddDuplicate() {
+            employeeService.add("test", "testtest");
+            assertThrows(EmployeeAlreadyAddedException.class, () ->employeeService.add("test", "testtest"));
         }
 
         @Test
         void testFull () {
-            employeeService.add("testt", "testtest", 1000, 1);
-            employeeService.add("testtt", "testtest", 1000, 1);
-            employeeService.add("testttt", "testtest", 1000, 1);
-            employeeService.add("testtttt", "testtest", 1000, 1);
-            employeeService.add("testttttt", "testtest", 1000, 1);
-            employeeService.add("testtttttt", "testtest", 1000, 1);
-            employeeService.add("testttttttt", "testtest", 1000, 1);
-            employeeService.add("testtttttttt", "testtest", 1000, 1);
-            employeeService.add("testtttttttttt", "testtest", 1000, 1);
-            employeeService.add("testttttttttttt", "testtest", 1000, 1);
-            assertThrows(EmployeeStoragelsFullException.class, () -> employeeService.add("testtest", "testtest", 1000, 1));
+            employeeService.add("testt", "testtest");
+            employeeService.add("testtt", "testtest");
+            employeeService.add("testttt", "testtest");
+            employeeService.add("testtttt", "testtest");
+            employeeService.add("testttttt", "testtest");
+            employeeService.add("testtttttt", "testtest");
+            employeeService.add("testttttttt", "testtest");
+            employeeService.add("testtttttttt", "testtest");
+            employeeService.add("testtttttttttt", "testtest");
+            employeeService.add("testttttttttttt", "testtest");
+            assertThrows(EmployeeStoragelsFullException.class, () -> employeeService.add("testtest", "testtest"));
         }
 
         @Test
                 void testWrongName() {
-            assertThrows(WrongNameException.class, () -> employeeService.add("test11", "testtest", 1000, 1));
-            assertThrows(WrongNameException.class, () -> employeeService.add("1test11", "testtest", 1000, 1));
-            assertThrows(WrongNameException.class, () -> employeeService.add("2test11", "t2esttest", 1000, 1));
-            assertThrows(WrongNameException.class, () -> employeeService.add("3test11", "testtest2", 1000, 1));
+            assertThrows(WrongNameException.class, () -> employeeService.add("test11", "testtest"));
+            assertThrows(WrongNameException.class, () -> employeeService.add("1test11", "testtest"));
+            assertThrows(WrongNameException.class, () -> employeeService.add("2test11", "t2esttest"));
+            assertThrows(WrongNameException.class, () -> employeeService.add("3test11", "testtest2"));
         }
 
         @Test
                 void testGetAll() {
-            employeeService.add("testt", "testtest", 1000, 1);
-            employeeService.add("testtt", "testtestt", 2000, 3);
+            employeeService.add("testt", "testtest" );
+            employeeService.add("testtt", "testtestt");
 
             var actual = employeeService.getAll();
             assertThat(actual).containsExactlyInAnyOrder(
-                    new Employee("Testt", "Testtest",1000, 1),
-                    new Employee("Testtw", "Testtestr",2000, 3)
+                    new Employee("Testt", "Testtest"),
+                    new Employee("Testtw", "Testtestr")
             );
         }
 
@@ -78,14 +79,13 @@ class EmployeeServiceTest {
 
         @Test
                 void testRemove() {
-            assertThrows(EmployeeNotFoundException.class, () -> employeeService.remove("foo", "bar"));
+            assertThrows(EmployeeNotFoundException.class, () -> employeeService.delete("foo", "bar"));
 
-            employeeService.add("testt", "testtest", 1000, 1);
-            employeeService.add("testttt", "testtest", 2000, 3);
+            employeeService.add("testt", "testtest");
+            employeeService.add("testttt", "testtest");
             var actual = employeeService.find("testt", "testtest");
             assertThat(actual).isNotNull();
-            employeeService.remove("testt", "testtest");
-            assertThrow(EmployeeNotFoundException.class, () -> employeeService.find("test", "testtest"));
+            employeeService.delete("testt", "testtest");
+            assertThrows(EmployeeNotFoundException.class, () -> employeeService.find("test", "testtest"));
         }
     }
-}
