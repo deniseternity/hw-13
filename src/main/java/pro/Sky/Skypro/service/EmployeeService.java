@@ -18,7 +18,7 @@ public class EmployeeService {
     private final Map<String, Employee> employeeMap = new HashMap<>(MAX_COUNT);
 
     public Employee add(String firstName, String lastName) {
-        Employee employee = new Employee (firstName,lastName);
+        Employee employee = new Employee(firstName,lastName);
         String key = makeKey(firstName, lastName);
         if (employeeMap.containsKey(key)) {
             throw new EmployeeAlreadyAddedException();
