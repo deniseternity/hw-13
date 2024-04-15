@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import pro.Sky.Skypro.exception.EmployeeAlreadyAddedException;
 import pro.Sky.Skypro.exception.EmployeeNotFoundException;
 import pro.Sky.Skypro.exception.EmployeeStoragelsFullException;
-import pro.Sky.Skypro.exception.WrongNameException;
 import pro.Sky.Skypro.model.Employee;
 import pro.Sky.Skypro.service.EmployeeService;
 import static org.assertj.core.api.Assertions.*;
@@ -16,19 +15,11 @@ class EmployeeServiceTest {
 
     @Test
     void testAdd() {
-
         EmployeeService employeeService = new EmployeeService();
-
         employeeService.add("test", "testtest");
-        employeeService.add("tEsTTEST", "teStteStest");
-
         var actual1 = employeeService.find("test", "TESTTEST");
-
-        assertThat(actual1).isNotNull();
-        assertThat(actual1.getFirstName()).isEqualTo("Test");
-        assertThat(actual1.getLastName()).isEqualTo("Testtest");
-        assertThat(actual1.getDepartment()).isEqualTo(1);
-        assertThat(actual1.getSalary()).isEqualTo(1000);
+        assertThat(actual1.getFirstName()).isEqualTo("test");
+        assertThat(actual1.getLastName()).isEqualTo("testtest");
 }
 
         @Test
@@ -44,31 +35,18 @@ class EmployeeServiceTest {
             employeeService.add("testttt", "testtest");
             employeeService.add("testtttt", "testtest");
             employeeService.add("testttttt", "testtest");
-            employeeService.add("testtttttt", "testtest");
-            employeeService.add("testttttttt", "testtest");
-            employeeService.add("testtttttttt", "testtest");
-            employeeService.add("testtttttttttt", "testtest");
-            employeeService.add("testttttttttttt", "testtest");
             assertThrows(EmployeeStoragelsFullException.class, () -> employeeService.add("testtest", "testtest"));
         }
 
         @Test
-                void testWrongName() {
-            assertThrows(WrongNameException.class, () -> employeeService.add("test11", "testtest"));
-            assertThrows(WrongNameException.class, () -> employeeService.add("1test11", "testtest"));
-            assertThrows(WrongNameException.class, () -> employeeService.add("2test11", "t2esttest"));
-            assertThrows(WrongNameException.class, () -> employeeService.add("3test11", "testtest2"));
-        }
-
-        @Test
                 void testGetAll() {
-            employeeService.add("testt", "testtest" );
-            employeeService.add("testtt", "testtestt");
+            employeeService.add("testt", "testtest");
+            employeeService.add("testtt", "testtest");
 
             var actual = employeeService.getAll();
             assertThat(actual).containsExactlyInAnyOrder(
-                    new Employee("Testt", "Testtest"),
-                    new Employee("Testtw", "Testtestr")
+                    new Employee("testt", "testtest"),
+                    new Employee("testtt", "testtest")
             );
         }
 

@@ -15,7 +15,7 @@ import java.util.Set;
 public class EmployeeService {
 
     private static final int MAX_COUNT = 5;
-    private final Map<String, Employee> employeeMap = new HashMap<>(MAX_COUNT);
+    private final Map<String, Employee> employeeMap= new HashMap<>(MAX_COUNT);
 
     public Employee add(String firstName, String lastName) {
         Employee employee = new Employee(firstName,lastName);
